@@ -41,7 +41,9 @@ Vista de la API desde el browser:
 
 ![basic train flow](img/02_API.png)
 
-2. Se definió un endpoint (/predict/) que permite recibir datos en formato JSON, elegir manualmente uno de los modelos entrenados y luego, devolver la predicción basada en la entrada de los datos del usuario. Las entradas también deben ser introducidas manualmente por el usuario, y en el siguiente orden: Tamaño (mm) y grosor del pico (mm), a la longitud de la aleta (mm) y al peso del animal (gramos).
+2. Se definió un endpoint (/set_model/) cuya funcionalidad es que el usuario elija manualmente uno de los modelos entrenados
+
+3. Se definió un endpoint (/predict/) que permite recibir datos en formato JSON, y luego, devolver la predicción basada en la entrada de los datos del usuario. Las entradas también deben ser introducidas manualmente por el usuario, y en el siguiente orden: Tamaño (mm) y grosor del pico (mm), a la longitud de la aleta (mm) y al peso del animal (gramos).
 
 Elección manual del modelo:
 ![basic train flow](img/03_EleccionModelo.png)
