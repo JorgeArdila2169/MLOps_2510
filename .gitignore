@@ -1,0 +1,20 @@
+# Ignorar caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar entornos virtuales
+venv/
+.env/
+
+# Ignorar archivos de configuración de editores
+.vscode/
+.idea/
+
+# Ignorar logs y archivos temporales
+*.log
+.DS_Store
+
+# Ignorar archivos de swap de Vim
+*.swp
