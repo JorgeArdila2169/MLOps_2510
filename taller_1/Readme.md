@@ -41,15 +41,21 @@ Vista de la API desde el browser:
 
 ![basic train flow](img/02_API.png)
 
-2. Se definió un endpoint (/set_model/) cuya funcionalidad es que el usuario elija manualmente uno de los modelos entrenados
-
-3. Se definió un endpoint (/predict/) que permite recibir datos en formato JSON, y luego, devolver la predicción basada en la entrada de los datos del usuario. Las entradas también deben ser introducidas manualmente por el usuario, y en el siguiente orden: Tamaño (mm) y grosor del pico (mm), a la longitud de la aleta (mm) y al peso del animal (gramos).
+2. Se definió un endpoint (/set_model/) cuya funcionalidad es que el usuario elija manualmente uno de los modelos entrenados.
 
 Elección manual del modelo:
 ![basic train flow](img/03_EleccionModelo.png)
 
 Confirmación de la elección del modelo:
 ![basic train flow](img/04_ConfirmacionModelo.png)
+
+3. Se definió un endpoint (/predict/) que permite recibir datos en formato JSON, y luego, devolver la predicción basada en la entrada de los datos del usuario. Las entradas también deben ser introducidas manualmente por el usuario, y en el siguiente orden: Tamaño (mm) y grosor del pico (mm), a la longitud de la aleta (mm) y al peso del animal (gramos).
+
+Introducción de los datos de entrada por parte del usuario:
+![basic train flow](img/05_DatosEntrada.png)
+
+Predicción del modelo:
+![basic train flow](img/06_PrediccionModelo.png)
 
 
 ## 3. Contenedor y Despliegue
@@ -63,9 +69,3 @@ A continuación, se resumen los pasos importante realizados en este módulo:
 3. Se genera la imagen del contenedor y se despliega en un servidor accesible (localhost).
 
 4. Se establece una conexión para uso del usuario mediante el navegador web y desde allí se introducen los datos que consumen las predicciones del modelo.
-
-Introducción de los datos de entrada por parte del usuario:
-![basic train flow](img/05_DatosEntrada.png)
-
-Predicción del modelo:
-![basic train flow](img/06_PrediccionModelo.png)
