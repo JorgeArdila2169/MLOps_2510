@@ -1,0 +1,11 @@
+# Usar una imagen base oficial
+FROM alpine:latest
+
+# Definir el directorio de trabajo
+WORKDIR /data
+
+# Copiar un archivo de prueba
+COPY archivo_2.txt /data/
+
+# Comando por defecto al iniciar el contenedor
+CMD ["ls", "-l", "/data"]
