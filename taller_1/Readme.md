@@ -69,3 +69,5 @@ A continuación, se resumen los pasos importante realizados en este módulo:
 3. Se genera la imagen del contenedor y se despliega en un servidor accesible (localhost).
 
 4. Se establece una conexión para uso del usuario mediante el navegador web y desde allí se introducen los datos que consumen las predicciones del modelo.
+
+5.  Para acceder a la interfaz de usuario, se debe incuir el texto /interface en la url en lugar de /docs habitual.
