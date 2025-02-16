@@ -1,0 +1,20 @@
+# Imagen base de Python con JupyterLab
+FROM python:3.10
+
+# Instalar UV
+RUN pip install uv
+
+# Crear directorio de trabajo
+WORKDIR /app
+
+# Inicializar UV y agregar dependencias
+RUN uv init && uv add jupyterlab pandas numpy scikit-learn ydata-profiling joblib matplotlib seaborn ipywidgets xgboost
+
+# Asegurar que el entorno de UV se activa y Jupyter esté en PATH
+ENV PATH="/app/.venv/bin:$PATH"
+
+# Exponer puerto para Jupyter
+EXPOSE 8888
+
+# Comando de inicio
+CMD ["/app/.venv/bin/jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root"]
