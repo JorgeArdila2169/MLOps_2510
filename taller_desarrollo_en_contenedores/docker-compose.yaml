@@ -1,0 +1,23 @@
+
+services:
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile.jupyter
+    container_name: jupyter_env
+    volumes:
+      - ./notebooks:/notebooks
+      - ./models:/models
+    ports:
+      - "8888:8888"
+    command: ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--NotebookApp.notebook_dir=/notebooks"]
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: api_service
+    volumes:
+      - ./models:/models
+    ports:
+      - "8000:8000"
