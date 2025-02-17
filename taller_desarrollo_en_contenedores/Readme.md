@@ -4,7 +4,7 @@
 
 En este informe se documenta la integración de uv en un entorno de desarrollo basado en Docker Compose para la gestión eficiente de dependencias en un proyecto de Machine Learning. Se han configurado servicios que incluyen JupyterLab, entrenamiento de modelos y una API para la inferencia, todo dentro de un ecosistema de contenedores interconectados. En la siguiente imagen se aprecia la estructura del proyecto, la cual será descrita en una sección más adelante:
 
-![basic train flow](img/01_arquitectura.png)
+![basic train flow](img/01_arquitectura2.png)
 
 ### GENERALIDADES DEL PROYECTO
 
