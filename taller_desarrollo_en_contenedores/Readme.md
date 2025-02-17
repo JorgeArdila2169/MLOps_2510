@@ -37,7 +37,7 @@ Esto último, se logra a partir del endpoint @app.get("/models"), cuyo funcionam
 
 Para la implementación del Docker Compose, se creó un archivo docker-compose.yml que define los servicios de Jupyter y de la API, y los volúmenes compartidos de ambos servicios, como se observa a continuación:
 
-![basic train flow](img/02_ Docker-Compose.png)
+![basic train flow](img/02_Docker-Compose.png)
 
 
 En la imagen anterior se aprecia que se usó el volumen llamado ‘/models’ para acceder a los modelos entrenados desde ambos servicios. Por otro lado, se exponen los puertos para cada servicio, a saber, de Jupyter (8888) y la API (8000).
@@ -76,8 +76,8 @@ Finalmente, se incorporó Swagger UI para facilitar el uso y prueba de los endpo
 
 1.	La selección y carga de modelos.
 
-![basic train flow](img/03_ Select_Model.png)
+![basic train flow](img/03_Select_Model.png)
 
 2.	La inferencia correcta de datos de entrada.
 
-![basic train flow](img/04_ Prediction.png)
+![basic train flow](img/04_Prediction.png)
