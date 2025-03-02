@@ -1,0 +1,15 @@
+# Docker Compose para JupyterLab
+services:
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jupyter_env
+    volumes:
+      - ./notebooks:/notebooks
+      - ./transformation_files:/transformation_files
+      - ./data_cleaned:/data_cleaned
+      - ./pipeline:/pipeline
+    ports:
+      - "8888:8888"
+    command: ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--NotebookApp.notebook_dir=/notebooks"]
