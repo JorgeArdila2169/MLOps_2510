@@ -12,4 +12,4 @@ services:
       - ./pipeline:/pipeline
     ports:
       - "8888:8888"
-    command: ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--NotebookApp.notebook_dir=/notebooks"]
+    command: ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--NotebookApp.notebook_dir=/"]
