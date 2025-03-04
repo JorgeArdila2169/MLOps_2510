@@ -22,7 +22,7 @@ Este proyecto tiene como objetivo construir un entorno de desarrollo MLOps que p
 
 ### Acceso al proyecto
 
-El proyecto se montó sobre una de las máquinas virtuales facilitadas a los miembros del equipo de trabajo, por consiguiente, para acceder al proyecto y probar su funcionamiento, se sugiere acceder a la siguiente URL: [http:10.43.101.201:8888/lab?token=e049114d3aedca5f74eb61f57170ea5d331a4e28bcb276a3 ](http://10.43.101.201:8888/lab?token=e049114d3aedca5f74eb61f57170ea5d331a4e28bcb276a3)
+El proyecto se montó sobre una de las máquinas virtuales facilitadas a los miembros del equipo de trabajo, por consiguiente, para acceder al proyecto y probar su funcionamiento, se sugiere acceder a la siguiente URL: [http:10.43.101.201:8888/lab?token=ceda0a6e5081c55ea3e2a4e06f3c61be585babfd25d0edc9 ](http://10.43.101.201:8888/lab?token=ceda0a6e5081c55ea3e2a4e06f3c61be585babfd25d0edc9)
 
 
 En la siguiente imagen se observa el funcionamiento del proyecto corriendo sobre la máquina virtual desde la cual se desarrolló e implementó el proyecto:
