@@ -90,6 +90,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: mlops
+      MYSQL_DATABASE: penguin
     # (this is just an example, not intended to be a production configuration)
   postgres:
     image: postgres:13
