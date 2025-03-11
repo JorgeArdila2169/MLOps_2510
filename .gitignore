@@ -7,6 +7,12 @@ __pycache__/
 # Ignorar archivos con variables de entorno y secretos
 *.env
 
+# Ignorar bases de datos Airflow
+taller_airflow/postgres_data/
+taller_airflow/mysql_data/
+taller_airflow/plugins/
+taller_airflow/logs
+
 # Ignorar entornos virtuales
 venv/
 .env/
