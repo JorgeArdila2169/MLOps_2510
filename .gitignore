@@ -11,7 +11,7 @@ __pycache__/
 taller_airflow/postgres_data/
 taller_airflow/mysql_data/
 taller_airflow/plugins/
-taller_airflow/logs
+taller_airflow/logs/
 
 # Ignorar entornos virtuales
 venv/
