@@ -12,13 +12,13 @@ def preprocess_penguins():
     sql_query = "SELECT * FROM penguins"
     df = mysql_hook.get_pandas_df(sql_query)
 
-    # Eliminar filas donde el sexo es 0 (NaN originalmente)
+    # Eliminar filas donde el sexo es 0
     df = df[df["sex"] != 0]
 
     # Eliminar las columnas de especie e isla
     df = df.drop(columns=["species", "island"])
 
-    # Filtrar solo filas donde 'sex' es válido (MALE o FEMALE)
+    # Filtrar solo filas donde 'sex' es válido
     df = df[df["sex"].isin(["MALE", "FEMALE"])]
 
     # Mapear el sexo: MALE -> 1, FEMALE -> 0
@@ -30,7 +30,7 @@ def preprocess_penguins():
     val_df = rest_df.sample(frac=0.5, random_state=200)
     test_df = rest_df.drop(val_df.index)
 
-    # **Guardar los datos en MySQL**
+    # Guardar los datos en MySQL
     conn = mysql_hook.get_sqlalchemy_engine()
 
     # Borrar tablas previas si existen

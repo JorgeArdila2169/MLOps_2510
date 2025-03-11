@@ -11,10 +11,10 @@ MODEL_PATH = "/models/xgboost_model.pkl"
 
 # Cargar el modelo al iniciar la API
 if not os.path.exists(MODEL_PATH):
-    raise RuntimeError(f"❌ No se encontró el modelo en {MODEL_PATH}")
+    raise RuntimeError(f"No se encontró el modelo en {MODEL_PATH}")
 
 model = joblib.load(MODEL_PATH)
-print("✅ Modelo cargado correctamente")
+print("Modelo cargado correctamente")
 
 # Mapeo de etiquetas
 label_mapping = {0: "FEMALE", 1: "MALE"}
@@ -29,7 +29,7 @@ class PredictionInput(BaseModel):
 @app.get("/")
 def home():
     """Bienvenida a la API"""
-    return {"message": "Bienvenido a la API de predicción de pingüinos 🐧"}
+    return {"message": "Bienvenido a la API de predicción de pingüinos"}
 
 @app.post("/predict/")
 def predict(input_data: PredictionInput):
@@ -54,5 +54,5 @@ def predict(input_data: PredictionInput):
         }
 
     except Exception as e:
-        print(f"⚠️ Error en la predicción: {e}")
+        print(f"Error en la predicción: {e}")
         raise HTTPException(status_code=500, detail=f"Error al hacer la predicción: {e}")
