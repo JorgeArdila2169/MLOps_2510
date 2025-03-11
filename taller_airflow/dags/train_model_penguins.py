@@ -37,13 +37,13 @@ def train_xgboost():
     accuracy = accuracy_score(y_test, y_pred)
     report = classification_report(y_test, y_pred, target_names=["Female (0)", "Male (1)"])
     
-    print(f"✅ Accuracy: {accuracy:.2f}")
+    print(f"Accuracy: {accuracy:.2f}")
     print("\n🔹 Classification Report:\n", report)
     
     # Guardar el modelo
     model_path = "/opt/airflow/models/xgboost_model.pkl"
     joblib.dump(xg_model, model_path)
-    print(f"✅ Modelo guardado en {model_path}")
+    print(f"Modelo guardado en {model_path}")
 
 # Definir DAG
 default_args = {

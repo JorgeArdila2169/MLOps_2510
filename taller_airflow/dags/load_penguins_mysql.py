@@ -5,12 +5,12 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.mysql.hooks.mysql import MySqlHook
 from datetime import datetime
 
-# Ruta del archivo CSV en la carpeta dags/
+# Ruta del archivo CSV
 CSV_PATH = "/opt/airflow/data/penguins_size.csv"
 
 # Función para cargar datos en MySQL
 def load_csv_to_mysql():
-    mysql_hook = MySqlHook(mysql_conn_id="mysql_penguins")  # Conexión creada en Airflow
+    mysql_hook = MySqlHook(mysql_conn_id="mysql_penguins") 
     conn = mysql_hook.get_conn()
     cursor = conn.cursor()
 
@@ -42,7 +42,7 @@ def load_csv_to_mysql():
     conn.commit()
     cursor.close()
     conn.close()
-    print("✔️ Datos insertados en MySQL correctamente")
+    print("Datos insertados en MySQL correctamente")
 
 # Definir el DAG en Airflow
 default_args = {
