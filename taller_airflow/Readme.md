@@ -36,7 +36,7 @@ Es decir que, Docker Compose crea una infraestructura modular y escalable para e
 
 A continuación se muestra un fragmento del archivo docker-compose.yaml creado para el taller, específicamente en la sección de la configuración del servicio MySQL:
 
-![basic train flow](img/02_ Docker-Compose.png)
+![basic train flow](img/02_Docker-Compose.png)
 
 ## EJECUCIÓN DEL TALLER
 
@@ -67,21 +67,24 @@ La API de inferencia fue desarrollada con FastAPI para gestionar solicitudes de 
 
 ### Inferencia de Datos
 
-Las entradas deben ser introducidas manualmente por el usuario y de allí se realiza la predicción mediante el modelo Xgboost implementado. Los datos de entrada que se requieren son: Tamaño (mm) y grosor del pico (mm), a la longitud de la aleta (mm) y al peso del animal (gramos).
+Las entradas deben ser introducidas manualmente por el usuario y de allí se realiza la predicción mediante el modelo Xgboost implementado. Los datos de entrada que se requieren son: Tamaño (mm) y grosor del pico (mm), a la longitud de la aleta (mm) y al peso del animal (gramos). La imagen a continuación, permite observar la interfaz de la API para el ingreso de los datos de entrada que serán utilizados para el modelo para realizar la respectiva inferencia:
 
-![basic train flow](img/03_ Prediction.png)
+![basic train flow](img/03_Prediction.png)
 
 
 ## PRUEBAS DURANTE LA IMPLEMENTACIÓN
 Durante la implementación de este taller, el equipo utilizó herramientas adicionales para verificar el correcto funcionamiento de las tareas programadas en los DAGs. Aunque la interfaz de Airflow permite visualizar ciertos detalles, estos se limitan a la ejecución de las tareas dentro de los DAGs, sin mostrar explícitamente los resultados obtenidos por dichas tareas.
 
+En la siguiente imagen se aprecian los DAGs creados desde la interfaz gráfica de usuario de Airflow:
 
-![basic train flow](img/04_ DAGS.png)
+![basic train flow](img/04_DAGS.png)
 
 En este contexto, se optó por utilizar DBeaver, una aplicación cliente de SQL y herramienta de administración de bases de datos. Su propósito en el presente taller fue validar la correcta ejecución de los DAGs de cargue y preprocesamiento. Para ello, se verificó que la base de datos cruda (penguins_size.csv) se cargara correctamente y que la estructura de la base de datos generada con el servicio MySQL (penguins_db) reflejara adecuadamente los datos preprocesados.
 
 Para acceder a la base de datos, se requieren las siguientes credenciales:
 
 penguins_db (Usuario: user, Contraseña: password)
+
+Esta imagen ilustra la interfaz de la herramienta DBeaver durante la verificación de la estructura de la base de datos preprocesada:
 
 ![basic train flow](img/05_db.png)
