@@ -83,7 +83,7 @@ La API de inferencia fue desarrollada con FastAPI (api/main.py) para gestionar s
 
 Para levantar la API, se ejecutó:
 
-Para la inferencia del modelo (FastAPI): http://localhost:8000/docs 
+Para la inferencia del modelo (FastAPI): http://localhost:7000/docs 
 
 
 ### Inferencia de Datos
@@ -112,9 +112,6 @@ MLflow UI: http://localhost:5000
 
 PostgreSQL: Disponible en localhost:5433
 
-Interfaz de Airflow (Airflow UI): http://localhost:8080/ 
-Usuario: airflow ; Contraseña: airflow
-
-Para la inferencia del modelo (FastAPI): http://localhost:8000/docs 
+Para la inferencia del modelo (FastAPI): http://localhost:7000/docs 
 
 
