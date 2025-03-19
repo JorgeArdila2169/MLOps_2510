@@ -114,4 +114,6 @@ PostgreSQL: Disponible en localhost:5433
 
 Para la inferencia del modelo (FastAPI): http://localhost:7000/docs 
 
+El taller de igual forma quedó montado en la máquina virtual con dirección ip: 10.43.101.165
+
 
