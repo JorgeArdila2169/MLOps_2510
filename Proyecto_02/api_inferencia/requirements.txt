@@ -1,0 +1,19 @@
+# Core API and inference
+fastapi==0.110.0
+uvicorn[standard]>=0.12.0,<0.23.0
+
+# ML y entrenamiento
+scikit-learn==1.4.1
+pandas==2.2.1
+numpy==1.26.4
+
+# MLflow
+mlflow==2.11.3
+boto3==1.34.59
+pymysql==1.1.0
+
+# UI para predicción
+streamlit==1.32.2
+
+# Otros
+requests==2.31.0
