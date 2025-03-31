@@ -10,7 +10,7 @@ import pandas as pd
 
 # Configuraciones
 GROUP_NUMBER = 1  # Cambia esto por tu número de grupo
-DATA_API_URL = f"http://10.43.101.108:80/data?group_number={GROUP_NUMBER}"
+DATA_API_URL = f"http://10.43.101.201:80/data?group_number=5"
 OUTPUT_DIR = "/opt/airflow/data/raw"
 
 # Asegura que el directorio exista
