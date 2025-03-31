@@ -1,0 +1,109 @@
+# docker-compose.yaml
+version: '3.8'
+
+services:
+
+  airflow-init:
+    image: apache/airflow:2.8.1
+    restart: on-failure
+    entrypoint: /bin/bash
+    command: -c "airflow db init"
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=mysql+pymysql://mlflow:mlflow@mysql:3306/mlflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./data:/opt/airflow/data
+    depends_on:
+      - mysql
+
+  airflow-webserver:
+    image: apache/airflow:2.8.1
+    ports:
+      - "8080:8080"
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=mysql+pymysql://mlflow:mlflow@mysql:3306/mlflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./data:/opt/airflow/data
+    command: webserver
+    restart: always
+    depends_on:
+      - airflow-init
+      - mysql
+
+  airflow-scheduler:
+    image: apache/airflow:2.8.1
+    restart: always
+    depends_on:
+      - airflow-webserver
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=mysql+pymysql://mlflow:mlflow@mysql:3306/mlflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./data:/opt/airflow/data
+    command: scheduler
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.11.3
+    ports:
+      - "5000:5000"
+    environment:
+      - BACKEND_STORE_URI=mysql+pymysql://mlflow:mlflow@mysql:3306/mlflow
+      - ARTIFACT_ROOT=s3://mlflow/
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
+    command: mlflow server --backend-store-uri mysql+pymysql://mlflow:mlflow@mysql:3306/mlflow --default-artifact-root s3://mlflow/ --host 0.0.0.0 --port 5000
+    depends_on:
+      - mysql
+      - minio
+
+  minio:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=mlflow
+      - MYSQL_DATABASE=mlflow
+      - MYSQL_USER=mlflow
+      - MYSQL_PASSWORD=mlflow
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  fastapi:
+    build: ./api_inferencia
+    container_name: fastapi
+    ports:
+      - "80:80"
+    volumes:
+      - ./api_inferencia:/app
+    restart: always
+
+  streamlit:
+    build: ./ui
+    container_name: streamlit
+    ports:
+      - "8503:8503"
+    command: streamlit run app.py --server.port 8503
+    volumes:
+      - ./ui:/app
+    depends_on:
+      - fastapi
+
+volumes:
+  minio-data:
+  mysql-data:
