@@ -1,27 +1,16 @@
-# Usar una versión más reciente de Python
-FROM python:3.10-slim
+# Imagen base de Python
+FROM python:3.9
 
-# Instalar y actualizar pip
-RUN pip install --upgrade pip
-
-# Crear y establecer directorio de trabajo
+# Establecer el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copiar el archivo requirements.txt
-COPY requirements.txt ./
-
-# Instalar las dependencias del proyecto
+# Copiar y instalar dependencias
+COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Asegurar que el entorno de UV se activa y esté en PATH
-ENV PATH="/app/.venv/bin:$PATH"
-
-# Copiar el resto del código fuente
+# Copiar todo el código del proyecto
 COPY . .
 
-# Exponer los puertos necesarios
-EXPOSE 80 8503
-
-# Comando por defecto (puede ser overrideado en docker-compose)
-CMD ["python", "main.py"]
+# Comando por defecto (puede ser ajustado según el servicio principal)
+CMD ["bash"]
 
