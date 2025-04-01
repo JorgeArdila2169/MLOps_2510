@@ -9,7 +9,7 @@ app = FastAPI()
 model_uri = "models:/forest_cover_prediction/latest"
 model = mlflow.pyfunc.load_model(model_uri)
 
-# API de datos
+# API de datos (ajustada con la URL correcta)
 DATA_API_URL = "http://10.43.101.201:80/data"
 
 @app.get("/")
@@ -18,7 +18,7 @@ def home():
 
 @app.get("/predict-from-data")
 def predict_from_data(group_number: int):
-    # 1️⃣ Solicitar datos desde la API externa
+    # 1️⃣ Solicitar datos desde la API externa con el parámetro correcto
     response = requests.get(f"{DATA_API_URL}?group_number={group_number}")
     
     if response.status_code != 200:
