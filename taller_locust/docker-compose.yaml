@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  api:
+    image: shadowmen2169/mlops:latest
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.75"
+          memory: 500M
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    external: true

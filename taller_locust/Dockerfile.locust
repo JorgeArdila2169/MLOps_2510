@@ -1,0 +1,16 @@
+FROM python:3.9-slim
+
+# Establecer el directorio de trabajo
+WORKDIR /locust
+
+# Instalamos Locust
+RUN pip install locust pydantic
+
+# Copiamos el archivo de pruebas a la imagen
+COPY locustfile.py .
+
+# Exponemos el puerto para la interfaz web de Locust
+EXPOSE 8089
+
+# Comando para ejecutar Locust en modo interactivo
+CMD ["locust"]
