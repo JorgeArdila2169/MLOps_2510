@@ -91,39 +91,39 @@ Con el comando docker stats, se observó lo siguiente:
 
 2.	CPU: 2.5 - RAM: 1500M
 
-![basic train flow](img/05_2-5 CPUS - 1500M Graphs.jpeg)
+![basic train flow](img/05_2_5_CPUS_1500M_Graphs.jpeg)
 
 Con el comando docker stats, se observó lo siguiente:
 
-![basic train flow](img/06_2-5 CPUS - 1500M Uso de Recursos.jpeg)
+![basic train flow](img/06_2_5_CPUS_1500M_Uso_de_Recursos.jpeg)
 
 
 3.	CPU: 2 - RAM: 1000M
 
-![basic train flow](img/07_2 CPUS - 1000M Graphs.jpeg)
+![basic train flow](img/07_2_CPUS_1000M_Graphs.jpeg)
 
 Con el comando docker stats, se observó lo siguiente:
 
-![basic train flow](img/08_2 CPUS - 1000M Uso de Recursos.jpeg)
+![basic train flow](img/08_2_CPUS_1000M_Uso_de_Recursos.jpeg)
 
 
 
 4.	CPU: 0.75 - RAM: 500M
 
-![basic train flow](img/09_0-75 CPUS - 500M Graphs.jpeg)
+![basic train flow](img/09_0_75_CPUS_500M_Graphs.jpeg)
 
 Con el comando docker stats, se observó lo siguiente:
 
-![basic train flow](img/10_0-75 CPUS - 500M Uso de recursos.jpeg)
+![basic train flow](img/10_0_75_CPUS_500M_Uso_de_recursos.jpeg)
 
 
 5.	CPU: 0.5 - RAM: 100M
 
-![basic train flow](img/11_0-5 CPUS - 100M Graphs.jpeg)
+![basic train flow](img/11_0_5_CPUS_100M_Graphs.jpeg)
 
 Con el comando docker stats, se observó lo siguiente:
 
-![basic train flow](img/12_0-5 CPUS - 100M Uso de Recursos.jpeg)
+![basic train flow](img/12_0_5_CPUS_100M_Uso_de_Recursos.jpeg)
 
 ### Conclusiones de las pruebas
 
