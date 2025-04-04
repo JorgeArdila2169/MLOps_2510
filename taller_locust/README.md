@@ -12,15 +12,15 @@ La finalidad de este taller, es la de identificar los recursos mínimos necesari
 ![basic train flow](img/01_arquitectura.png)
 
 Componentes principales:
-•	Contenedor FastAPI para inferencia.
-•	Contenedor Locust para pruebas de carga.
-•	Modelo .pkl cargado directamente.
-•	Todos los servicios conectados mediante red Docker my_network.
+-	Contenedor FastAPI para inferencia.
+-	Contenedor Locust para pruebas de carga.
+-	Modelo .pkl cargado directamente.
+-	Todos los servicios conectados mediante red Docker my_network.
 
 Red personalizada my_network:
-•	Declarada como red externa en ambos archivos docker-compose.
-•	Permite la comunicación directa entre servicios definidos en archivos separados.
-•	Se crea con: docker network create my_network
+-	Declarada como red externa en ambos archivos docker-compose.
+-	Permite la comunicación directa entre servicios definidos en archivos separados.
+-	Se crea con: docker network create my_network
 
 ![basic train flow](img/02_my_network.png)
 
@@ -32,10 +32,10 @@ Red personalizada my_network:
 
 Se desarrolló una API con FastAPI contenida en el archivo main.py, que permite enviar un POST al endpoint /predict/ con las siguientes características:
 
-•	Recibe 4 variables numéricas de entrada (longitud y profundidad del pico, largo de aletas, masa corporal).
-•	Realiza predicciones con un modelo Random Forest serializado (random_forest_model.pkl).
-•	Devuelve el sexo del pingüino como resultado (FEMALE o MALE).
-•	Exposición del endpoint /predict/ para recibir predicciones POST.
+-	Recibe 4 variables numéricas de entrada (longitud y profundidad del pico, largo de aletas, masa corporal).
+-	Realiza predicciones con un modelo Random Forest serializado (random_forest_model.pkl).
+-	Devuelve el sexo del pingüino como resultado (FEMALE o MALE).
+-	Exposición del endpoint /predict/ para recibir predicciones POST.
 
 El modelo se carga al inicio de la aplicación y se realiza validación de entrada con Pydantic.
 
@@ -83,11 +83,11 @@ Locust permite lanzar pruebas desde una interfaz web en el puerto 8089.
 
 1.	CPU: 4 - RAM: 500M
 
-![basic train flow](img/03_4 CPUS - 500M Graphs.jpeg)
+![basic train flow](img/03_4_CPUS_500M_Graphs.jpeg)
 
 Con el comando docker stats, se observó lo siguiente:
 
-![basic train flow](img/04_4 CPUS - 500M Uso de recursos.jpeg)
+![basic train flow](img/04_4_CPUS_500M_Uso_de_recursos.jpeg)
 
 2.	CPU: 2.5 - RAM: 1500M
 
@@ -166,4 +166,3 @@ Con el comando docker stats, se observó lo siguiente:
 •	Con 3 réplicas, fue posible reducir los recursos de cada contenedor a 0.5 CPU y 300 MB RAM, manteniendo estabilidad, con lo cual se responde al principal objetivo de este taller.
 
 •	Se observó que el escalado es eficiente hasta cierto punto, pero agregar más réplicas sin cesar no aporta mejoras lineales.
-
