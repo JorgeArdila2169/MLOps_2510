@@ -156,3 +156,9 @@ Esto facilita la validación del sistema y su uso por parte de personas no técn
 
 La solución implementada cumple con los requerimientos del proyecto y demuestra una integración efectiva de herramientas de MLOps modernas, desde la recolección de datos hasta la inferencia en tiempo real, siguiendo las mejores prácticas de arquitectura basada en microservicios y contenedores. El uso de Docker Compose facilitó la gestión integrada de los componentes y permitió una integración fluida entre ellos.
 
+## EJECUCIÓN DEL PROYECTO
+
+
+El proyecto quedó montado completamente en la máquina virtual con dirección ip: 10.43.101.165
+
+La API para la ingesta de datos quedó montada en la máquina virtual con dirección ip: 10.43.101.201 en el puerto 80
