@@ -66,9 +66,10 @@ def train_and_register_model():
     X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
 
     best_f1 = 0
-    best_run_id = None
+    best_model_run_id = None
+    best_model_info = None
 
-    for i in range(10):
+    for i in range(5):
         n_estimators = np.random.randint(50, 150)
         max_depth = np.random.choice([5, 10, 15, None])
 
@@ -96,23 +97,31 @@ def train_and_register_model():
             mlflow.log_metric("val_recall", val_report["weighted avg"]["recall"])
             mlflow.log_metric("test_recall", test_report["weighted avg"]["recall"])
 
+            # Registrar directamente el modelo dentro del run
+            result = mlflow.sklearn.log_model(
+                sk_model=model,
+                artifact_path="model"
+            )
+
+            # Guardar el mejor run
             if val_report["weighted avg"]["f1-score"] > best_f1:
                 best_f1 = val_report["weighted avg"]["f1-score"]
-                best_run_id = run.info.run_id
+                best_model_run_id = run.info.run_id
+                best_model_info = result
 
-    # Registrar el mejor modelo como 'best_model' y ponerlo en producción
-    model_uri = f"runs:/{best_run_id}/model"
-    mlflow.register_model(model_uri, MODEL_NAME)
-
+    # Cambiar el stage del mejor modelo a Production
     client = mlflow.tracking.MlflowClient()
-    versions = client.get_latest_versions(MODEL_NAME, stages=["None"])
-    if versions:
-        client.transition_model_version_stage(
-            name=MODEL_NAME,
-            version=versions[0].version,
-            stage="Production",
-            archive_existing_versions=True
-        )
+    if best_model_info:
+        latest_versions = client.get_latest_versions(name=MODEL_NAME, stages=["None"])
+        for v in latest_versions:
+            if v.run_id == best_model_run_id:
+                client.transition_model_version_stage(
+                    name=MODEL_NAME,
+                    version=v.version,
+                    stage="Production",
+                    archive_existing_versions=True
+                )
+                print(f"Modelo {MODEL_NAME} v{v.version} promovido a 'Production'")
 
 default_args = {
     'owner': 'airflow',
