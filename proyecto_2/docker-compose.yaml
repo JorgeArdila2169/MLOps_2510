@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # MySQL para la metadata de MLflow
+  mysql_mlflow:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MLFLOW_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MLFLOW_MYSQL_DATABASE}
+      MYSQL_USER: ${MLFLOW_MYSQL_USER}
+      MYSQL_PASSWORD: ${MLFLOW_MYSQL_PASSWORD}
+    ports:
+      - "5433:3306" 
+    volumes:
+      - mysql_mlflow_data:/var/lib/mysql
+    networks:
+      - general-net
+
+  # Minio para almacenamiento de artefactos
+  minio:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - general-net
+
+  # Servicio MLflow
+  mlflow:
+    build: 
+      context: .
+      dockerfile: Dockerfile.mlflow
+    command: ["mlflow", "server", "--backend-store-uri", "mysql+pymysql://${MLFLOW_MYSQL_USER}:${MLFLOW_MYSQL_PASSWORD}@mysql_mlflow:3306/${MLFLOW_MYSQL_DATABASE}", "--default-artifact-root", "s3://mlflows3/artifacts", "--host", "0.0.0.0", "--serve-artifacts"]
+    environment:
+      MLFLOW_S3_ENDPOINT_URL: ${MLFLOW_S3_ENDPOINT_URL}
+      MLFLOW_TRACKING_URI: ${MLFLOW_SERVER_URI}
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql_mlflow
+      - minio
+    networks:
+      - general-net
+
+  # API de inferencia (FastAPI)
+  fastapi:
+    build: ./api
+    env_file:
+      - ./api/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mlflow
+    networks:
+      - general-net
+
+  # Interfaz gráfica con Gradio
+  gradio:
+    build: ./gradio_ui
+    environment:
+      INFERENCE_API_URI: "http://fastapi:8000"
+    ports:
+      - "8503:8503"
+    depends_on:
+      - fastapi
+    networks:
+      - general-net
+
+volumes:
+  mysql_mlflow_data:
+  minio_data:
+
+networks:
+  general-net:
+    driver: bridge
+    external: true
