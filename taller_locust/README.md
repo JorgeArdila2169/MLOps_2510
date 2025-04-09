@@ -198,3 +198,5 @@ El equipo enfrentó un reto relacionado con la implementación de réplicas. Par
 •	Con 1 réplica, fue posible reducir los recursos hasta 0.3 CPU y 300 MB RAM, manteniendo estabilidad, pero con el desempeño bajo.
 
 •	Se observó que el escalado es eficiente hasta cierto punto, pero agregar más réplicas sin cesar no aporta mejoras lineales.
+
+•	A pesar de las múltiples configuraciones probadas, incluyendo aquellas que lograron mejorar la disponibilidad, no fue posible alcanzar tiempos de respuesta razonables en la API.
