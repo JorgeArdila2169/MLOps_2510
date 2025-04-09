@@ -8,8 +8,9 @@ services:
     ports:
       - "8089:8089"
     networks:
-      - my_network
+      - locust_network
 
 networks:
-  my_network:
+  locust_network:
     external: true
+    name: locust_network

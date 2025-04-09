@@ -8,11 +8,12 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.75"
-          memory: 500M
+          cpus: "0.3"
+          memory: 300M
     networks:
-      - my_network
+      - locust_network
 
 networks:
-  my_network:
+  locust_network:
     external: true
+    name: locust_network
