@@ -135,34 +135,66 @@ Con el comando docker stats, se observó lo siguiente:
 
 ### Escalamiento horizontal
 
-Para saber si se podrían reducir los recursos más del mínimo encontrado en el paso anterior, se realizaron pruebas disminuyendo progresivamente los recursos del contenedor. 
+Para saber si se podrían reducir los recursos más allá del mínimo encontrado en el paso anterior, se realizaron pruebas disminuyendo progresivamente los recursos del contenedor y configurando la cantidad de réplicas. 
 
-Al alcanzar el límite inferior de CPU: 0.5 RAM: 300M, comenzaron a registrarse fallos de respuesta y tiempos de espera prolongados. La respuesta de esta configuración se aprecia en la siguiente gráfica:
+El primer experimento se configuró con una réplica y con CPU: 0.3 RAM: 200M. El resultado en Locust fue el siguiente:
 
-![basic train flow](img/13_0-5 CPUS - 300M Graphs.jpeg)
-
-
-Con el comando docker stats, se observó lo siguiente:
-
-![basic train flow](img/14_0-5 CPUS - 300M Uso de Recursos.jpeg)
-
-Ahora bien, se incrementó el número de réplicas de la API a tres (3) en el docker-compose.yaml, con el código deploy:  replicas: 3, permitiendo distribuir la carga entre varios contenedores. A continuación se evidencia el resultado del escalamiento horizontal configurado:
-
-![basic train flow](img/15_Replicas Graphs.jpeg)
-
+![basic train flow](img/1_Replica_0-3_200M_Locust.jpeg)
 
 Con el comando docker stats, se observó lo siguiente:
 
-![basic train flow](img/16_Replicas Uso de Recursos.jpeg)
+![basic train flow](img/1_Replica_0-3_200M_Stats.jpeg)
 
+Luego, se configuró la réplica con CPU: 0.5 RAM: 200M. El resultado en Locust fue el siguiente:
 
-Al aumentar la replicas a 5, el resultado obtenido fue el siguiente:
+![basic train flow](img/1_Replica_0-5_200M_Locust.jpeg)
 
 Con el comando docker stats, se observó lo siguiente:
+
+![basic train flow](img/1_Replica_0-5_200M_Stats.jpeg)
+
+Dado que con los experimentos anteriores, se presentó indisponibilidad del servicio, se procedió con la configuración de la réplica con CPU: 0.3 RAM: 300M. La respuesta de esta configuración se aprecia en la siguiente gráfica:
+
+![basic train flow](img/1_Replica_0-3_300M_Locust.jpeg)
+
+Con el comando docker stats, se observó lo siguiente:
+
+![basic train flow](img/1_Replica_0-3_300M_Stats.jpeg)
+
+
+Ahora bien, se incrementó el número de réplicas de la API a tres (3) en el docker-compose.yaml, con el código deploy:  replicas: 3, permitiendo distribuir la carga entre varios contenedores. A continuación se evidencia el resultado del escalamiento horizontal configurado con el mínimo hallado en el numeral anterior, es decir CPU: 0.75 y RAM: 500 MB:
+
+![basic train flow](img/3_Replicas_0-75_500M_Locust.jpeg)
+
+Con el comando docker stats, se observó lo siguiente:
+
+![basic train flow](img/3_Replicas_0-75_500M_Stats.jpeg)
+
+Luego, siguiendo el enunciado del taller, y con el objetivo de disminuir los recursos al mínimo, se reconfiguraron las 3 réplicas a CPU: 0.5 y RAM: 100 MB:
+
+![basic train flow](img/3_Replicas_0-5_100M_Locust.jpeg)
+
+Con el comando docker stats, se observó lo siguiente:
+
+![basic train flow](img/3_Replicas_0-5_100M_Stats.jpeg)
+
+Como con la configuración anterior, se presentó la indisponibilidad, se reconfiguraron las 3 réplicas con los recursos así, CPU: 0.5 y RAM: 200 MB:
+
+![basic train flow](img/3_Replicas_0-5_200M_Locust.jpeg)
+
+Con el comando docker stats, se observó lo siguiente:
+
+![basic train flow](img/3_Replicas_0-5_100M_Stats.jpeg)
+
+Esta última configuración presentó una mejor disponibilidad y un mayor desempeño en términos de respuestas por segundo.
+
+El equipo enfrentó un reto relacionado con la implementación de réplicas. Para que estas funcionaran correctamente, fue necesario realizar el despliegue en modo Swarm de Docker, ya que en el modo tradicional (standalone), las réplicas no operaban de forma adecuada y requerían la asignación manual de puertos diferentes para cada instancia, lo cual dificultaba la escalabilidad y la gestión del servicio.
 
 
 ## CONCLUSIONES
 
-•	Con 3 réplicas, fue posible reducir los recursos de cada contenedor a 0.5 CPU y 300 MB RAM, manteniendo estabilidad, con lo cual se responde al principal objetivo de este taller.
+•	Con 3 réplicas, fue posible reducir los recursos de cada contenedor a 0.5 CPU y 200 MB RAM, manteniendo estabilidad, con lo cual se responde al principal objetivo de este taller.
+
+•	Con 1 réplica, fue posible reducir los recursos hasta 0.3 CPU y 300 MB RAM, manteniendo estabilidad, pero con el desempeño bajo.
 
 •	Se observó que el escalado es eficiente hasta cierto punto, pero agregar más réplicas sin cesar no aporta mejoras lineales.
