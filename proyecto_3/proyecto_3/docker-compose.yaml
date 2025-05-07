@@ -1,0 +1,137 @@
+version: '3.8'
+
+services:
+  mysql_mlflow:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MLFLOW_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MLFLOW_MYSQL_DATABASE}
+      MYSQL_USER: ${MLFLOW_MYSQL_USER}
+      MYSQL_PASSWORD: ${MLFLOW_MYSQL_PASSWORD}
+    ports:
+      - "5433:3306"
+    volumes:
+      - mysql_mlflow_data:/var/lib/mysql
+    networks:
+      - proyecto_3
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql_data:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATA_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DATA_MYSQL_DATABASE}
+      MYSQL_USER: ${DATA_MYSQL_USER}
+      MYSQL_PASSWORD: ${DATA_MYSQL_PASSWORD}
+    ports:
+      - "5434:3306"
+    volumes:
+      - mysql_data_data:/var/lib/mysql
+    networks:
+      - proyecto_3
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - proyecto_3
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mlflow:
+    build: 
+      context: .
+      dockerfile: Dockerfile.mlflow
+    command: ["mlflow", "server", "--backend-store-uri", "mysql+pymysql://${MLFLOW_MYSQL_USER}:${MLFLOW_MYSQL_PASSWORD}@mysql_mlflow:3306/${MLFLOW_MYSQL_DATABASE}", "--default-artifact-root", "s3://			mlflows3/artifacts", "--host", "0.0.0.0", "--serve-artifacts"]
+    environment:
+      MLFLOW_S3_ENDPOINT_URL: ${MLFLOW_S3_ENDPOINT_URL}
+      MLFLOW_TRACKING_URI: ${MLFLOW_TRACKING_URI}
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "5000:5000"
+    depends_on:
+      mysql_mlflow:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    networks:
+      - proyecto_3
+
+  fastapi:
+    build: ./api
+    environment:
+      MLFLOW_TRACKING_URI: ${MLFLOW_TRACKING_URI}
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+      MLFLOW_S3_ENDPOINT_URL: ${MLFLOW_S3_ENDPOINT_URL}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mlflow
+    networks:
+      - proyecto_3
+
+  gradio:
+    build: ./ui
+    environment:
+      FASTAPI_PREDICT_URL: ${FASTAPI_PREDICT_URL}
+    ports:
+      - "8503:8503"
+    depends_on:
+      - fastapi
+    networks:
+      - proyecto_3
+   
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - proyecto_3
+
+  grafana:
+    image: grafana/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - prometheus
+    networks:
+      - proyecto_3
+      
+volumes:
+  mysql_mlflow_data:
+  minio_data:
+  mysql_data_data:
+
+networks:
+  proyecto_3:
+    driver: bridge
