@@ -8,19 +8,19 @@ Este proyecto implementa una arquitectura MLOps completa desplegada sobre una ú
 
 ## OBJETIVOS DEL PROYECTO
 
-•	Automatizar el flujo completo de un sistema de machine learning con MLOps utilizando herramientas de nivel industrial.
+-	Automatizar el flujo completo de un sistema de machine learning con MLOps utilizando herramientas de nivel industrial.
 
-•	Ejecutar procesos periódicos de entrenamiento utilizando DAGs de Airflow.
+-	Ejecutar procesos periódicos de entrenamiento utilizando DAGs de Airflow.
 
-•	Registrar los resultados de cada ejecución en MLflow, incluyendo hiperparámetros, métricas, artefactos y versiones de modelo.
+-	Registrar los resultados de cada ejecución en MLflow, incluyendo hiperparámetros, métricas, artefactos y versiones de modelo.
 
-•	Usar MLflow para gestionar versiones de modelo y designar automáticamente el mejor como "Production".
+-	Usar MLflow para gestionar versiones de modelo y designar automáticamente el mejor como "Production".
 
-•	Proveer una API RESTful y una interfaz gráfica que permitan consumir el modelo de producción sin necesidad de cambios en el código.
+-	Proveer una API RESTful y una interfaz gráfica que permitan consumir el modelo de producción sin necesidad de cambios en el código.
 
-•	Establecer un sistema de monitoreo y observabilidad con Prometheus y Grafana.
+-	Establecer un sistema de monitoreo y observabilidad con Prometheus y Grafana.
 
-•	Simular carga y estimar la capacidad máxima de usuarios concurrentes mediante Locust.
+-	Simular carga y estimar la capacidad máxima de usuarios concurrentes mediante Locust.
 
 ## ESTRUCTURA DEL PROYECTO
 
@@ -37,29 +37,28 @@ La estructura del repositorio se diseñó para facilitar el despliegue modular d
 
 Se crearon múltiples DAGs en Airflow para automatizar la ingesta y transformación de los datos:
 
-•	load_raw_data.py: Carga progresiva en lotes de 15.000 registros a la base de datos RAW.
-•	process_data.py: Limpieza, transformación y escritura en la base CLEAN.
-•	load_val_test_data.py: Divide los datos procesados en conjuntos de entrenamiento, validación y prueba.
+-	load_raw_data.py: Carga progresiva en lotes de 15.000 registros a la base de datos RAW.
+-	process_data.py: Limpieza, transformación y escritura en la base CLEAN.
+-	load_val_test_data.py: Divide los datos procesados en conjuntos de entrenamiento, validación y prueba.
 
 Cada ejecución se encuentra agendada y puede ser monitoreada desde la interfaz de Airflow.
 
 
 ### 2. Entrenamiento y Registro de Modelos
 
-•	Los modelos se entrenan usando el DAG train_model.py.
-•	Se registra cada ejecución en MLflow, incluyendo:
-o	AUC, Precisión, Recall.
-o	Artefactos como el modelo serializado (.pkl) y gráficas de evaluación.
-•	El mejor modelo (por AUC) se promueve automáticamente a "Production" usando el DAG promote_best_model.py, desde el cual se etiqueta (TAG) con ‘true’ en el campo ‘best_model’ aquel modelo que posee el mejor rendimiento (accuracy).
-•	
-MLflow está configurado con PostgreSQL para los metadatos y MinIO como bucket S3 para artefactos.
+-	Los modelos se entrenan usando el DAG train_model.py.
+-	Se registra cada ejecución en MLflow, incluyendo:
+  -	AUC, Precisión, Recall.
+  -	Artefactos como el modelo serializado (.pkl) y gráficas de evaluación.
+-	El mejor modelo (por AUC) se promueve automáticamente a "Production" usando el DAG promote_best_model.py, desde el cual se etiqueta (TAG) con ‘true’ en el campo ‘best_model’ aquel modelo que posee el mejor rendimiento (accuracy).
+- MLflow está configurado con PostgreSQL para los metadatos y MinIO como bucket S3 para artefactos.
 
 ### 3. API para Inferencia (FastAPI)
 
-•	Implementada en un contenedor independiente.
-•	Expone dos endpoints:
-o	/predict: Recibe datos, consulta a MLflow el modelo en producción y retorna la predicción.
-o	/metrics: Expuesto para Prometheus. Incluye latencia, conteo de peticiones y errores.
+-	Implementada en un contenedor independiente.
+-	Expone dos endpoints:
+  - /predict: Recibe datos, consulta a MLflow el modelo en producción y retorna la predicción.
+  -	/metrics: Expuesto para Prometheus. Incluye latencia, conteo de peticiones y errores.
 
 El código es genérico y el modelo activo se selecciona mediante mlflow.pyfunc.load_model("models:/Model/Production"), lo que elimina la necesidad de actualizaciones manuales del código al cambiar de versión.
 
@@ -68,21 +67,20 @@ El código es genérico y el modelo activo se selecciona mediante mlflow.pyfunc.
 ### 4. Interfaz de usuario (UI) con Streamlit
 
 
-•	Construida para facilitar el ingreso de valores por parte del usuario.
-•	Permite probar rápidamente predicciones y ver qué versión de modelo fue usada.
-•	El archivo ui/app.py contiene el código de la interfaz, que se conecta con la API de FastAPI.
+-	Construida para facilitar el ingreso de valores por parte del usuario.
+-	Permite probar rápidamente predicciones y ver qué versión de modelo fue usada.
+-	El archivo ui/app.py contiene el código de la interfaz, que se conecta con la API de FastAPI.
 
 
 ### 5. Observabilidad
 
 
-•	Prometheus recolecta métricas expuestas por FastAPI (tiempo de respuesta, volumen, errores).
-•	Grafana despliega dashboards personalizados para:
-o	Latencia promedio.
-o	Tráfico por minuto.
-o	Errores por tipo de petición.
-•	Configuración de dashboards en grafana/provisioning/.
-
+-	Prometheus recolecta métricas expuestas por FastAPI (tiempo de respuesta, volumen, errores).
+- Grafana despliega dashboards personalizados para:
+    Latencia promedio.
+    Tráfico por minuto.
+    Errores por tipo de petición.
+- Configuración de dashboards en grafana/provisioning/.
 
 
 ### 6. Pruebas de Carga
