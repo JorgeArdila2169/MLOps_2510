@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airflow-triggerer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airflow-triggerer
+  template:
+    metadata:
+      labels:
+        app: airflow-triggerer
+    spec:
+      containers:
+      - name: airflow-triggerer
+        image: shadowmen2169/custom_airflow:latest
+        command: ["airflow", "triggerer"]
+        env:
+        - name: AIRFLOW__CORE__EXECUTOR
+          value: CeleryExecutor
+        - name: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
+          value: postgresql+psycopg2://airflow:airflow@postgres-service:5432/airflow
+        - name: AIRFLOW__CELERY__RESULT_BACKEND
+          value: db+postgresql://airflow:airflow@postgres-service:5432/airflow
+        - name: AIRFLOW__CELERY__BROKER_URL
+          value: redis://redis-service:6379/0
+        envFrom:
+        - secretRef:
+            name: project-secrets
+        volumeMounts:
+        - name: airflow-data
+          mountPath: /opt/airflow/data
+        - name: airflow-logs
+          mountPath: /opt/airflow/logs
+      volumes:
+      - name: airflow-data
+        persistentVolumeClaim:
+          claimName: airflow-data-pvc
+      - name: airflow-logs
+        persistentVolumeClaim:
+          claimName: airflow-logs-pvc
+

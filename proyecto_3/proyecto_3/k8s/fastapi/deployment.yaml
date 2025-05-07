@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi
+  template:
+    metadata:
+      labels:
+        app: fastapi
+    spec:
+      containers:
+      - name: fastapi
+        image: shadowmen2169/proyecto_3_fastapi:latest
+        env:
+        - name: MLFLOW_TRACKING_URI
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MLFLOW_TRACKING_URI
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MINIO_ROOT_USER
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MINIO_ROOT_PASSWORD
+        - name: MLFLOW_S3_ENDPOINT_URL
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MLFLOW_S3_ENDPOINT_URL
+        ports:
+        - containerPort: 8000
+

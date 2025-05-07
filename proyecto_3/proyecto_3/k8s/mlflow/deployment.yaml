@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mlflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mlflow
+  template:
+    metadata:
+      labels:
+        app: mlflow
+    spec:
+      containers:
+      - name: mlflow
+        image: shadowmen2169/proyecto_3_mlflow:latest
+        command:
+          - mlflow
+          - server
+          - --backend-store-uri
+          - mysql+pymysql://$(MLFLOW_MYSQL_USER):$(MLFLOW_MYSQL_PASSWORD)@mysql-mlflow-service:3306/$(MLFLOW_MYSQL_DATABASE)
+          - --default-artifact-root
+          - s3://mlflows3/artifacts
+          - --host
+          - 0.0.0.0
+          - --serve-artifacts
+        env:
+        - name: MLFLOW_S3_ENDPOINT_URL
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MLFLOW_S3_ENDPOINT_URL
+        - name: MLFLOW_TRACKING_URI
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MLFLOW_TRACKING_URI
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MINIO_ROOT_USER
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MINIO_ROOT_PASSWORD
+        - name: MLFLOW_MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MLFLOW_MYSQL_USER
+        - name: MLFLOW_MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MLFLOW_MYSQL_PASSWORD
+        - name: MLFLOW_MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MLFLOW_MYSQL_DATABASE
+        ports:
+        - containerPort: 5000
+

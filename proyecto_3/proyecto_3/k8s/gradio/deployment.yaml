@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gradio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gradio
+  template:
+    metadata:
+      labels:
+        app: gradio
+    spec:
+      containers:
+      - name: gradio
+        image: shadowmen2169/proyecto_3_gradio:latest
+        ports:
+        - containerPort: 8503
+        envFrom:
+        - secretRef:
+            name: project-secrets
+

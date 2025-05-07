@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: locust-service
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 8089
+      targetPort: 8089
+      nodePort: 30889  
+  selector:
+    app: locust
+
