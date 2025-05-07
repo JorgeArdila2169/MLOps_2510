@@ -187,15 +187,7 @@ sudo microk8s enable dns storage ingress
 
 Luego, se ejecuta el siguiente comando, con la finalidad de aplicar manifiestos YAML desde la carpeta k8s/:
 
-kubectl apply -f k8s/mlflow.yaml
-kubectl apply -f k8s/postgres.yaml
-kubectl apply -f k8s/minio.yaml
-kubectl apply -f k8s/airflow.yaml
-kubectl apply -f k8s/fastapi.yaml
-kubectl apply -f k8s/streamlit.yaml
-kubectl apply -f k8s/prometheus.yaml
-kubectl apply -f k8s/grafana.yaml
-
+kubectl apply -f "nombre-del-archivo.yaml"
 
 Acceder a la inferencia y dashboards a través de NodePort o Ingress.
 
