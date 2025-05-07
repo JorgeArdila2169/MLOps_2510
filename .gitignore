@@ -12,6 +12,7 @@ taller_airflow/postgres_data/
 taller_airflow/mysql_data/
 taller_airflow/plugins/
 taller_airflow/logs/
+proyecto_3/proyecto_3/airflow/logs
 
 # Ignorar entornos virtuales
 venv/
@@ -27,3 +28,7 @@ venv/
 
 # Ignorar archivos de swap de Vim
 *.swp
+
+# Ignorar Zone Identifier
+*.Zone.Identifier
+
