@@ -179,9 +179,11 @@ Para el despliegue local, se ejecuta el siguiente comando para construir e inici
 
 $ docker-compose up --build 
 
-Para el despliegue en Kubernetes, se ejecuta el siguiente comando para instalar K3s (una sola máquina virtual):
+Para el despliegue en Kubernetes, se ejecuta el siguiente comando para instalar microk8s en una sola máquina virtual:
 
-curl -sfL https://get.k3s.io | sh -
+sudo snap install microk8s --classic
+
+sudo microk8s enable dns storage ingress
 
 Luego, se ejecuta el siguiente comando, con la finalidad de aplicar manifiestos YAML desde la carpeta k8s/:
 
