@@ -41,9 +41,7 @@ custom_airflow: servidor Airflow con DAGs definidos para orquestación.
 
 proyecto_3_fastapi: servicio de inferencia via API REST.
 
-mlops: imagen base o consolidada para pruebas o despliegue integrado.
-
-
+proyecto_3_gradio: servicio de interfaz gráfica con Gradio.
 
 ## FLUJO DE TRABAJO MLOPS
 
@@ -52,11 +50,14 @@ mlops: imagen base o consolidada para pruebas o despliegue integrado.
 
 Se crearon múltiples DAGs en Airflow para automatizar la ingesta y transformación de los datos:
 
--	load_raw_data.py: Carga progresiva en lotes de 15.000 registros a la base de datos RAW.
--	process_data.py: Limpieza, transformación y escritura en la base CLEAN.
--	load_val_test_data.py: Divide los datos procesados en conjuntos de entrenamiento, validación y prueba.
+-	load_raw_data.py: Descarga el archivo csv del link de internet y lo guarda en la base de datos MySQL en la tabla 'raw_data'
+-	load_train_data.py: Carga progresiva en lotes de 15.000 registros del conjunto de entrenamiento desde 'raw_data' a la tabla 'train data'
+-	load_val_test_data.py: Carga en un solo proceso de los conjuntos de validación y prueba en 'validation_data' y 'test_data'
+-	process_data.py: Limpieza y selección de características de cada uno de los subconjuntos, guardados en 'train_data_cleaned', 'validation_data_cleaned' y 'test_data_cleaned'
+-	train_model.py: Ejecución de 10 experimentos de entrenamiento de un clasificador Random Forest con hiperparámetros aleatorios
+-	promote_best_model.py: Promueve al mejor modelo registrado en Mlflow a producción utilizando el "tag=best_model"
 
-Cada ejecución se encuentra agendada y puede ser monitoreada desde la interfaz de Airflow.
+Cada ejecución se encuentra y puede ser monitoreada desde la interfaz de Airflow.
 
 
 ### 2. Entrenamiento y Registro de Modelos
@@ -86,11 +87,11 @@ Los mencionados endpoints se aprecian en la siguiente imagen:
 ![basic train flow](img/06_fastApi.png)
 
 
-El código es genérico y el modelo activo se selecciona mediante mlflow.pyfunc.load_model("models:/Model/Production"), lo que elimina la necesidad de actualizaciones manuales del código al cambiar de versión.
+El código es genérico y el modelo activo se selecciona mediante la búsqueda de tags en mlflow correspondiente al mejor modelo, lo que elimina la necesidad de actualizaciones manuales del código al cambiar de versión.
 
 
 
-### 4. Interfaz de usuario (UI) con Streamlit
+### 4. Interfaz de usuario (UI) con Gradio
 
 
 -	Construida para facilitar el ingreso de valores por parte del usuario.
@@ -108,9 +109,9 @@ Ejemplo de cómo se ve la interfaz de usuario creada y en funcionamiento:
 
 -	Prometheus recolecta métricas expuestas por FastAPI (tiempo de respuesta, volumen, errores).
 - Grafana despliega dashboards personalizados para:
-    Latencia promedio.
-    Tráfico por minuto.
-    Errores por tipo de petición.
+    Serie de tiempo de latencia de respuesta
+    Conteo de predicciones realizadas
+    Conteo de predicciones por clase realizadas
 - Configuración de dashboards en grafana/provisioning/.
 
 En la siguiente imagen se observa el comportamiento del dashboard en Grafana el cual se actualiza en tiempo real, en la medida que se realizan nuevas inferencias en la interfaz de usuario:
@@ -156,7 +157,7 @@ Este ecosistema se construyó tomando como referencia el diagrama propuesto en e
 -	Apache Airflow: automatización de workflows y DAGs.
 -	MLflow + MinIO + PostgreSQL: experiment tracking, gestión de modelos y artefactos.
 -	FastAPI: API REST de inferencia.
--	Streamlit: interfaz gráfica de usuario.
+-	Gradio: interfaz gráfica de usuario.
 -	Prometheus + Grafana: monitoreo y dashboards.
 -	Locust: pruebas de carga y rendimiento.
 
@@ -165,9 +166,9 @@ Este ecosistema se construyó tomando como referencia el diagrama propuesto en e
 ## SEGUIMIENTO Y MÉTRICAS
 
 
--	MLflow UI: http://localhost:5000
--	Grafana: http://localhost:3000 (usuario: admin / contraseña: admin)
--	Locust: http://localhost:8089
+-	MLflow UI: http:/10.43.101.165:30500/
+-	Grafana: http:/10.43.101.165:30300/ (usuario: admin/contraseña: admin)
+-	Locust: http:/10.43.101.165:30889/
 
 Cada experimento registrado puede visualizarse con sus respectivos parámetros, métricas y artefactos.
 
@@ -201,12 +202,12 @@ https://www.youtube.com/watch?v=-WlYubfFD9E
 
 El proyecto quedó montado completamente en la máquina virtual con dirección ip: 10.43.101.165
 
-El despliegue se realizó en una máquina virtual con K3s. Los manifiestos YAML fueron definidos para cada componente.
+El despliegue se realizó en una máquina virtual con microk8s. Los manifiestos YAML fueron definidos para cada componente.
 
 Requisitos:
 - Docker
 -	Docker Compose
--	Kubernetes (K3s o Minikube)
+-	Kubernetes (microk8s)
 
 Para el despliegue local, se ejecuta el siguiente comando para construir e iniciar todos los servicios:
 
@@ -222,11 +223,13 @@ Luego, se ejecuta el siguiente comando, con la finalidad de aplicar manifiestos 
 
 kubectl apply -f "nombre-del-archivo.yaml"
 
-Acceder a la inferencia y dashboards a través de NodePort o Ingress.
+Acceder a la inferencia y dashboards a través de NodePort.
 
 ### Acceso:
--	MLflow UI: http://:5000
--	API FastAPI: http://:8000
--	Streamlit UI: http://:8501
--	Grafana: http://:3000 (admin/admin)
--	Locust: http://:8089
+-	MLflow UI: http:/10.43.101.165:30500/
+-	MiniO UI: http:/10.43.101.165:30901/
+-	API FastAPI: http:/10.43.101.165:30800/
+-	Airflow UI: http:/10.43.101.165:30080/
+-	Gradio UI: http:/10.43.101.165:30850/
+-	Grafana: http:/10.43.101.165:30300/ (admin/admin)
+-	Locust: http:/10.43.101.165:30889/
