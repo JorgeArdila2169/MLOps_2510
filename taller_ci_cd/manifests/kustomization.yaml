@@ -4,5 +4,4 @@ resources:
   - script-deployment.yaml
   - prometheus-deployment.yaml
   - grafana-deployment.yaml
-  - grafana-service.yaml
   - grafana-config/datasources.yaml
