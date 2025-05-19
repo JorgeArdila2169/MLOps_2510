@@ -12,8 +12,8 @@ jobs:
     env:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-      IMAGE_API: ${{ secrets.DOCKERHUB_USERNAME }}/api:latest
-      IMAGE_LOADTESTER: ${{ secrets.DOCKERHUB_USERNAME }}/loadtester:latest
+      IMAGE_API: ${{ secrets.DOCKERHUB_USERNAME }}/taller_ci_api:latest
+      IMAGE_LOADTESTER: ${{ secrets.DOCKERHUB_USERNAME }}/taller_ci_loadtester:latest
 
     steps:
     - name: Checkout repo
