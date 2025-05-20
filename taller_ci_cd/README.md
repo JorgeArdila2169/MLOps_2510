@@ -12,32 +12,7 @@ Este proyecto implementa una arquitectura completa de MLOps para entrenar, const
 
 ## Estructura del proyecto:
 
-MLOps_2510/
-  ├── .github/workflows/ci-cd.yml
-  ├── taller_ci_cd/
-    ├── README.md
-    ├── api
-    │   ├── Dockerfile
-    │   ├── app
-    │   │   ├── main.py
-    │   │   └── model.pkl
-    │   ├── requirements.txt
-    │   └── train_model.py
-    ├── argo-cd
-    │   └── app.yaml
-    ├── loadtester
-    │   ├── Dockerfile
-    │   ├── main.py
-    │   └── requirements.txt
-    └── manifests
-        ├── api-deployment.yaml
-        ├── api-service.yaml
-        ├── grafana-config
-        │   └── datasources.yaml
-        ├── grafana-deployment.yaml
-        ├── kustomization.yaml
-        ├── prometheus-deployment.yaml
-        └── script-deployment.yaml
+![image](https://github.com/user-attachments/assets/a1109072-f85b-4cb8-8696-ecf80e794d55)
 
 ## Requisitos Previos
 
@@ -124,27 +99,27 @@ Para el control de versiones de los manifiestos se utiliza el sha del commit cor
 La ejecución del workflow de Github Actions depende de un token de acceso personal (PAT_TOKEN) sobre el repositorio para que el bot logre realizar los push necesarios para actualizar los manifiestos con las imagenes nuevas, este token debe ser creado desde Github y agregado a los secretos del repositorio
 
 ## Comandos útiles
-# Ver pods
+### Ver pods
 ```bash
 kubectl get pods
 ```
 
-# Ver servicios
+### Ver servicios
 ```bash
 kubectl get svc
 ```
 
-# Escalar deployment
+### Escalar deployment
 ```bash
 kubectl scale deployment api-deployment --replicas=0
 ```
 
-# Aplicar manifests con kustomize
+### Aplicar manifests con kustomize
 ```bash
 kubectl apply -k taller_ci_cd/manifests
 ```
 
-# Ver logs
+### Ver logs
 ```bash
 kubectl logs deployment/api-deployment
 ```
