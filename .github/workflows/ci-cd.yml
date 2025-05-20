@@ -12,8 +12,10 @@ jobs:
     env:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-      IMAGE_API: ${{ secrets.DOCKERHUB_USERNAME }}/taller_ci_api:latest
-      IMAGE_LOADTESTER: ${{ secrets.DOCKERHUB_USERNAME }}/taller_ci_loadtester:latest
+      IMAGE_API_BASE: ${{ secrets.DOCKERHUB_USERNAME }}/taller_ci_api
+      IMAGE_LOADTESTER_BASE: ${{ secrets.DOCKERHUB_USERNAME }}/taller_ci_loadtester
+      GIT_EMAIL: "jorgemario2169@gmail.com"  
+      GIT_NAME: "Jorge Ardila"                  
 
     steps:
     - name: Checkout repo
@@ -39,14 +41,33 @@ jobs:
         username: ${{ env.DOCKERHUB_USERNAME }}
         password: ${{ env.DOCKERHUB_TOKEN }}
 
-    - name: Build and push API image
+    - name: Build and push API image with tag
       working-directory: taller_ci_cd/api
       run: |
-        docker build -t $IMAGE_API .
-        docker push $IMAGE_API
+        IMAGE_TAG=${{ github.sha }}
+        docker build -t $IMAGE_API_BASE:$IMAGE_TAG .
+        docker push $IMAGE_API_BASE:$IMAGE_TAG
+        echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
 
-    - name: Build and push LoadTester image
+    - name: Build and push LoadTester image with tag
       working-directory: taller_ci_cd/loadtester
       run: |
-        docker build -t $IMAGE_LOADTESTER .
-        docker push $IMAGE_LOADTESTER
+        IMAGE_TAG=${{ github.sha }}
+        docker build -t $IMAGE_LOADTESTER_BASE:$IMAGE_TAG .
+        docker push $IMAGE_LOADTESTER_BASE:$IMAGE_TAG
+
+    - name: Update deployment manifest with new API image tag
+      run: |
+        IMAGE_TAG=${{ github.sha }}
+        MANIFEST_API="taller_ci_cd/manifests/api-deployment.yaml"
+        MANIFEST_LOADTESTER="taller_ci_cd/manifests/script-deployment.yaml"
+
+        sed -i "s|\($IMAGE_API_BASE:\).*|\1$IMAGE_TAG|" $MANIFEST_API
+        sed -i "s|\($IMAGE_LOADTESTER_BASE:\).*|\1$IMAGE_TAG|" $MANIFEST_LOADTESTER
+
+        git config user.email "${{ env.GIT_EMAIL }}"
+        git config user.name "${{ env.GIT_NAME }}"
+
+        git add $MANIFEST_API $MANIFEST_LOADTESTER
+        git commit -m "Update image tags to $IMAGE_TAG [skip ci]"
+        git push origin main
