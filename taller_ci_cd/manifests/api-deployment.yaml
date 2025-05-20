@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: api
-        image: shadowmen2169/taller_ci_api:01b9eb96d75bfd50ea9de567c735e1ec338829eb
+        image: shadowmen2169/taller_ci_api:32f0489df5517a2879d31980bf7bcf406e55b52f
         ports:
         - containerPort: 8000
         readinessProbe:
