@@ -109,11 +109,6 @@ kubectl get pods
 kubectl get svc
 ```
 
-### Escalar deployment
-```bash
-kubectl scale deployment api-deployment --replicas=0
-```
-
 ### Aplicar manifests con kustomize
 ```bash
 kubectl apply -k taller_ci_cd/manifests
