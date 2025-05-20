@@ -56,7 +56,7 @@ jobs:
         docker build -t $IMAGE_LOADTESTER_BASE:$IMAGE_TAG .
         docker push $IMAGE_LOADTESTER_BASE:$IMAGE_TAG
 
-    - name: Update deployment manifest with new API image tag
+    - name: Update deployment manifests with new image tags and push
       run: |
         IMAGE_TAG=${{ github.sha }}
         MANIFEST_API="taller_ci_cd/manifests/api-deployment.yaml"
@@ -69,5 +69,5 @@ jobs:
         git config user.name "${{ env.GIT_NAME }}"
 
         git add $MANIFEST_API $MANIFEST_LOADTESTER
-        git commit -m "Update image tags to $IMAGE_TAG [skip ci]"
-        git push origin main
+        git commit -m "Update image tags to $IMAGE_TAG [skip ci]" || echo "No changes to commit"
+        git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }} HEAD:main
