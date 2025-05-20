@@ -1,7 +1,7 @@
 # Taller CI/CD - Despliegue de API de IA con FastAPI, Kubernetes y Argo CD
 # Grupo 5
 
-Este proyecto implementa una arquitectura completa de MLOps para entrenar, construir, desplegar y monitorear una API de predicción basada en un modelo de Machine Learning, utilizando:
+Este proyecto implementa una arquitectura de MLOps para entrenar, construir, desplegar y monitorear una API de predicción basada en un modelo de Machine Learning, utilizando:
 
 - FastAPI para la API
 - Kubernetes para orquestación de contenedores
