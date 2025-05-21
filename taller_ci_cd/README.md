@@ -118,3 +118,6 @@ kubectl apply -k taller_ci_cd/manifests
 ```bash
 kubectl logs deployment/api-deployment
 ```
+
+## Evidencia de servicios y pods en kubernetes
+![image](https://github.com/user-attachments/assets/9dd797f9-0212-4546-ab19-d7cc2f6d13c2)
