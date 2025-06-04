@@ -17,7 +17,7 @@ spec:
         kubernetes.io/hostname: noam02
       containers:
       - name: airflow-webserver
-        image: shadowmen2169/custom_airflow:latest
+        image: shadowmen2169/proyecto_4_airflow:latest
         command: ["airflow", "webserver"]
         ports:
         - containerPort: 8080
