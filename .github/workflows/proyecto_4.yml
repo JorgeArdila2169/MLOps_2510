@@ -54,7 +54,7 @@ jobs:
         docker push $DOCKERHUB_USERNAME/proyecto_4_fastapi:$IMAGE_TAG
 
     - name: Build and push Gradio image
-      working-directory: proyect_4/ui
+      working-directory: proyecto_4/ui
       run: |
         IMAGE_TAG=${{ github.sha }}
         docker build -t $DOCKERHUB_USERNAME/proyecto_4_gradio:$IMAGE_TAG .
