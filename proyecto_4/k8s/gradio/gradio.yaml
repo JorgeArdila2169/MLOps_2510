@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gradio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gradio
+  template:
+    metadata:
+      labels:
+        app: gradio
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: noam02
+      containers:
+      - name: gradio
+        image: shadowmen2169/proyecto_4_gradio:latest
+        ports:
+        - containerPort: 8503
+        envFrom:
+        - secretRef:
+            name: project-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gradio-service
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 8503
+      targetPort: 8503
+      nodePort: 30850
+  selector:
+    app: gradio

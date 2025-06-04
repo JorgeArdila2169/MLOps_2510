@@ -1,0 +1,75 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-mlflow-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-mlflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-mlflow
+  template:
+    metadata:
+      labels:
+        app: mysql-mlflow
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: noam02
+      containers:
+      - name: mysql
+        image: mysql:8
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MLFLOW_MYSQL_ROOT_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MLFLOW_MYSQL_DATABASE
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MLFLOW_MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MLFLOW_MYSQL_PASSWORD
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-data
+        persistentVolumeClaim:
+          claimName: mysql-mlflow-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-mlflow-service
+spec:
+  type: NodePort
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: 3306
+      nodePort: 30306
+  selector:
+    app: mysql-mlflow

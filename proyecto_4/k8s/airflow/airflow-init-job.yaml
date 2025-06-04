@@ -1,0 +1,67 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: airflow-init
+spec:
+  template:
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: noam02
+      containers:
+      - name: airflow-init
+        image: shadowmen2169/custom_airflow:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+          airflow db upgrade &&
+          airflow users create --username airflow --password airflow --firstname Admin --lastname User --role Admin --email admin@example.com
+        env:
+        - name: AIRFLOW__CORE__EXECUTOR
+          value: CeleryExecutor
+        - name: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
+          value: postgresql+psycopg2://airflow:airflow@postgres-service:5432/airflow
+        - name: AIRFLOW__CELERY__RESULT_BACKEND
+          value: db+postgresql://airflow:airflow@postgres-service:5432/airflow
+        - name: AIRFLOW__CELERY__BROKER_URL
+          value: redis://redis-service:6379/0
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MINIO_ROOT_USER
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MINIO_ROOT_PASSWORD
+        - name: MLFLOW_S3_ENDPOINT_URL
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MLFLOW_S3_ENDPOINT_URL
+        - name: MLFLOW_TRACKING_URI
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: MLFLOW_TRACKING_URI
+        - name: DATA_MYSQL_HOST
+          value: mysql-data-service
+        - name: DATA_MYSQL_PORT
+          value: "3306"
+        - name: DATA_MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: DATA_MYSQL_DATABASE
+        - name: DATA_MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: DATA_MYSQL_USER
+        - name: DATA_MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: project-secrets
+              key: DATA_MYSQL_PASSWORD
+      restartPolicy: OnFailure

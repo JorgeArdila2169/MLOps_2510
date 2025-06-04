@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-json
+data:
+  dashboard.json: |
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": {
+              "type": "grafana",
+              "uid": "-- Grafana --"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": null,
+      "links": [],
+      "panels": [
+        {
+          "type": "stat",
+          "title": "Total de Predicciones",
+          "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+          "targets": [
+            {
+              "expr": "predictions_total",
+              "refId": "A"
+            }
+          ],
+          "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8}
+        },
+        {
+          "type": "stat",
+          "title": "Errores de Predicción",
+          "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+          "targets": [
+            {
+              "expr": "prediction_errors_total",
+              "refId": "A"
+            }
+          ],
+          "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8}
+        },
+        {
+          "type": "timeseries",
+          "title": "Latencia de Predicción (ms)",
+          "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+          "targets": [
+            {
+              "expr": "predict_latency_seconds_sum / predict_latency_seconds_count * 1000",
+              "refId": "A"
+            }
+          ],
+          "gridPos": {"x": 0, "y": 8, "w": 24, "h": 8}
+        },
+        {
+          "type": "stat",
+          "title": "Modelo Activo (Run ID)",
+          "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+          "targets": [
+            {
+              "expr": "active_model_run_id",
+              "refId": "A"
+            }
+          ],
+          "gridPos": {"x": 0, "y": 16, "w": 12, "h": 8}
+        },
+        {
+          "type": "timeseries",
+          "title": "Tamaño de Batch",
+          "datasource": {"type": "prometheus", "uid": "PBFA97CFB590B2093"},
+          "targets": [
+            {
+              "expr": "prediction_batch_size_bucket",
+              "refId": "A"
+            }
+          ],
+          "gridPos": {"x": 12, "y": 16, "w": 12, "h": 8}
+        }
+      ],
+      "schemaVersion": 41,
+      "title": "Monitoreo API Regresión",
+      "uid": "regression-monitor",
+      "version": 1,
+      "time": {
+        "from": "now-1h",
+        "to": "now"
+      },
+      "timepicker": {},
+      "templating": {
+        "list": []
+      }
+    }
+

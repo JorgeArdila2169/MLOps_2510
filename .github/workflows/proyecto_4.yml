@@ -1,0 +1,94 @@
+name: CI/CD Pipeline Proyecto 4
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      GIT_EMAIL: "jorgemario2169@gmail.com"
+      GIT_NAME: "Jorge Ardila"
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ env.DOCKERHUB_USERNAME }}
+        password: ${{ env.DOCKERHUB_TOKEN }}
+
+    - name: Build and push Airflow image
+      working-directory: airflow
+      run: |
+        IMAGE_TAG=${{ github.sha }}
+        docker build -t $DOCKERHUB_USERNAME/proyecto_4_airflow:$IMAGE_TAG .
+        docker push $DOCKERHUB_USERNAME/proyecto_4_airflow:$IMAGE_TAG
+
+    - name: Build and push MLflow image
+      run: |
+        IMAGE_TAG=${{ github.sha }}
+        docker build -f Dockerfile.mlflow -t $DOCKERHUB_USERNAME/proyecto_4_mlflow:$IMAGE_TAG .
+        docker push $DOCKERHUB_USERNAME/proyecto_4_mlflow:$IMAGE_TAG
+
+    - name: Build and push FastAPI image
+      working-directory: api
+      run: |
+        IMAGE_TAG=${{ github.sha }}
+        docker build -t $DOCKERHUB_USERNAME/proyecto_4_fastapi:$IMAGE_TAG .
+        docker push $DOCKERHUB_USERNAME/proyecto_4_fastapi:$IMAGE_TAG
+
+    - name: Build and push Gradio image
+      working-directory: ui
+      run: |
+        IMAGE_TAG=${{ github.sha }}
+        docker build -t $DOCKERHUB_USERNAME/proyecto_4_gradio:$IMAGE_TAG .
+        docker push $DOCKERHUB_USERNAME/proyecto_4_gradio:$IMAGE_TAG
+
+    - name: Update deployment manifests with new image tags and push
+      run: |
+        IMAGE_TAG=${{ github.sha }}
+
+        IMAGE_AIRFLOW_BASE=${{ env.DOCKERHUB_USERNAME }}/proyecto_4_airflow
+        IMAGE_MLFLOW_BASE=${{ env.DOCKERHUB_USERNAME }}/proyecto_4_mlflow
+        IMAGE_API_BASE=${{ env.DOCKERHUB_USERNAME }}/proyecto_4_fastapi
+        IMAGE_UI_BASE=${{ env.DOCKERHUB_USERNAME }}/proyecto_4_gradio
+
+        MANIFEST_WEB="k8s/airflow/airflow-webserver.yaml"
+        MANIFEST_SCHEDULER="k8s/airflow/airflow-scheduler.yaml"
+        MANIFEST_WORKER="k8s/airflow/airflow-worker.yaml"
+        MANIFEST_TRIGGERER="k8s/airflow/airflow-triggerer.yaml"
+        MANIFEST_MLFLOW="k8s/mlflow/mlflow.yaml"
+        MANIFEST_API="k8s/fastapi/fastapi.yaml"
+        MANIFEST_UI="k8s/gradio/gradio.yaml"
+
+        sed -i "s|\($IMAGE_AIRFLOW_BASE:\).*|\1$IMAGE_TAG|" $MANIFEST_WEB
+        sed -i "s|\($IMAGE_AIRFLOW_BASE:\).*|\1$IMAGE_TAG|" $MANIFEST_SCHEDULER
+        sed -i "s|\($IMAGE_AIRFLOW_BASE:\).*|\1$IMAGE_TAG|" $MANIFEST_WORKER
+        sed -i "s|\($IMAGE_AIRFLOW_BASE:\).*|\1$IMAGE_TAG|" $MANIFEST_TRIGGERER
+        sed -i "s|\($IMAGE_MLFLOW_BASE:\).*|\1$IMAGE_TAG|" $MANIFEST_MLFLOW
+        sed -i "s|\($IMAGE_API_BASE:\).*|\1$IMAGE_TAG|" $MANIFEST_API
+        sed -i "s|\($IMAGE_UI_BASE:\).*|\1$IMAGE_TAG|" $MANIFEST_UI
+
+        git config user.email "${{ env.GIT_EMAIL }}"
+        git config user.name "${{ env.GIT_NAME }}"
+
+        git add $MANIFEST_WEB $MANIFEST_SCHEDULER $MANIFEST_WORKER $MANIFEST_TRIGGERER $MANIFEST_MLFLOW $MANIFEST_API $MANIFEST_UI
+        git commit -m "Update image tags to $IMAGE_TAG [skip ci]" || echo "No changes to commit"
+
+        git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}
+        git push origin HEAD:main
