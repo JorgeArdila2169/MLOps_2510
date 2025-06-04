@@ -17,7 +17,7 @@ spec:
         kubernetes.io/hostname: noam02
       containers:
       - name: mlflow
-        image: shadowmen2169/proyecto_4_mlflow:8bcce90f5bd76e1606a3f3b4b19fdced3d49d1bb
+        image: shadowmen2169/proyecto_4_mlflow:88b6f60fcb6098ba9623a52ca29820604fc1567c
         command:
           - mlflow
           - server
