@@ -87,6 +87,9 @@ jobs:
 
         git config user.email "${{ env.GIT_EMAIL }}"
         git config user.name "${{ env.GIT_NAME }}"
+        
+        git fetch origin main
+        git pull origin main --no-rebase
 
         git add $MANIFEST_WEB $MANIFEST_SCHEDULER $MANIFEST_WORKER $MANIFEST_TRIGGERER $MANIFEST_MLFLOW $MANIFEST_API $MANIFEST_UI
         git commit -m "Update image tags to $IMAGE_TAG [skip ci]" || echo "No changes to commit"
