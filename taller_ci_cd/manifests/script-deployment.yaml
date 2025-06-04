@@ -14,4 +14,4 @@ spec:
     spec:
       containers:
       - name: loadtester
-        image: shadowmen2169/taller_ci_loadtester:58709e47024fb361b06702c933a1edba0a404049
+        image: shadowmen2169/taller_ci_loadtester:6ddf0ad05864de2368db382a38a8f400f03dcd46
