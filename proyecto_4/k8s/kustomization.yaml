@@ -1,0 +1,24 @@
+resources:
+  - airflow/airflow-webserver.yaml
+  - airflow/airflow-scheduler.yaml
+  - airflow/airflow-worker.yaml
+  - airflow/airflow-triggerer.yaml
+  - airflow/airflow-logs-pvc.yaml
+  - airflow/airflow-data-pvc.yaml
+  - airflow/postgres.yaml
+  - airflow/redis.yaml
+
+  - fastapi/fastapi.yaml
+  - gradio/gradio.yaml
+  - grafana/grafana.yaml
+  - grafana/dashboard_config.yaml
+  - grafana/dashboard_json.yaml
+  - grafana/datasource_config.yaml
+
+  - prometheus/prometheus.yaml
+  - mlflow/mlflow.yaml
+  - minio/minio.yaml
+  - mysql-data/mysql-data.yaml
+  - mysql-mlflow/mysql-mlflow.yaml
+
+  - project-secrets.yaml
