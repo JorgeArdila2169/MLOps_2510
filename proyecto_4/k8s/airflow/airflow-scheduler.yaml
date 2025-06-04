@@ -16,7 +16,7 @@ spec:
         kubernetes.io/hostname: noam02
       containers:
       - name: airflow-scheduler
-        image: shadowmen2169/proyecto_4_airflow:latest
+        image: shadowmen2169/proyecto_4_airflow:8bcce90f5bd76e1606a3f3b4b19fdced3d49d1bb
         command: ["airflow", "scheduler"]
         env:
         - name: AIRFLOW__CORE__EXECUTOR
