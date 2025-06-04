@@ -33,7 +33,7 @@ jobs:
         password: ${{ env.DOCKERHUB_TOKEN }}
 
     - name: Build and push Airflow image
-      working-directory: airflow
+      working-directory: proyecto_4/airflow
       run: |
         IMAGE_TAG=${{ github.sha }}
         docker build -t $DOCKERHUB_USERNAME/proyecto_4_airflow:$IMAGE_TAG .
@@ -46,14 +46,14 @@ jobs:
         docker push $DOCKERHUB_USERNAME/proyecto_4_mlflow:$IMAGE_TAG
 
     - name: Build and push FastAPI image
-      working-directory: api
+      working-directory: proyecto_4/api
       run: |
         IMAGE_TAG=${{ github.sha }}
         docker build -t $DOCKERHUB_USERNAME/proyecto_4_fastapi:$IMAGE_TAG .
         docker push $DOCKERHUB_USERNAME/proyecto_4_fastapi:$IMAGE_TAG
 
     - name: Build and push Gradio image
-      working-directory: ui
+      working-directory: proyect_4/ui
       run: |
         IMAGE_TAG=${{ github.sha }}
         docker build -t $DOCKERHUB_USERNAME/proyecto_4_gradio:$IMAGE_TAG .
