@@ -17,7 +17,7 @@ spec:
         kubernetes.io/hostname: noam02
       containers:
       - name: gradio
-        image: shadowmen2169/proyecto_4_gradio:latest
+        image: shadowmen2169/proyecto_4_gradio:58709e47024fb361b06702c933a1edba0a404049
         ports:
         - containerPort: 8503
         envFrom:
