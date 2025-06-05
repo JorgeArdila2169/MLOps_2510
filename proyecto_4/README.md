@@ -7,3 +7,4 @@ sudo microk8s enable dns storage ingress
 
 sudo usermod -a -G microk8s $USER
 newgrp microk8s
+newgrp microk8s
