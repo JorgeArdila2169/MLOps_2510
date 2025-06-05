@@ -266,4 +266,7 @@ kubectl describe application proyecto-4 -n argocd
 * Grafana mostrando dashboards completos
 * DAG ejecutándose cada 15 minutos
 
-# Link al video de sustentación en Youtube: https://www.youtube.com/watch?v=sA6Kg9LZmzg 
+## Repositorios en Dockerhub con las imágenes
+![image](https://github.com/user-attachments/assets/3bc05a2d-f0bd-4713-8222-89bd4ab57d21)
+
+## Link al video de sustentación en Youtube: https://www.youtube.com/watch?v=sA6Kg9LZmzg 
