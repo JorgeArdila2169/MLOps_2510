@@ -16,7 +16,7 @@ spec:
         kubernetes.io/hostname: noam02
       containers:
       - name: airflow-triggerer
-        image: shadowmen2169/proyecto_4_airflow:6566287388b92a719e0cf8d5e640a83ebd9b91ca
+        image: shadowmen2169/proyecto_4_airflow:16bdd32d4fcec2f8a16fb4597cb5bf02e6b581bf
         command: ["airflow", "triggerer"]
         env:
         - name: AIRFLOW__CORE__EXECUTOR

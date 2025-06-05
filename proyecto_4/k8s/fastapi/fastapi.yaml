@@ -17,7 +17,7 @@ spec:
         kubernetes.io/hostname: noam02
       containers:
       - name: fastapi
-        image: shadowmen2169/proyecto_4_fastapi:6566287388b92a719e0cf8d5e640a83ebd9b91ca
+        image: shadowmen2169/proyecto_4_fastapi:16bdd32d4fcec2f8a16fb4597cb5bf02e6b581bf
         env:
         - name: MLFLOW_TRACKING_URI
           valueFrom:
