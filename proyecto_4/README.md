@@ -238,14 +238,14 @@ kubectl get svc -o wide - revisar todos los servicios levantados
 
 ## Ubicación de cada servicio:
 
-- Minio: 10.43.101.165:30901
-- MLFlow: 10.43.101.165:30500
-- Airflow: 10.43.101.165:30080
-- API inferencia: 10.43.101.165:30800/docs
-- Gradio: 10.43.101.165:30850
-- Prometheus: 10.43.101.201:30910
-- Grafana: 10.43.101.201:30300
-- ArgoCD: 10.43.101.201:30407
+- Minio: http://10.43.101.165:30901
+- MLFlow: http://10.43.101.165:30500
+- Airflow: http://10.43.101.165:30080
+- API inferencia: http://10.43.101.165:30800/docs
+- Gradio: http://10.43.101.165:30850
+- Prometheus: http://10.43.101.201:30910
+- Grafana: http://10.43.101.201:30300
+- ArgoCD: http://10.43.101.201:30407
 
 ## ArgoCD 
 
@@ -265,3 +265,5 @@ kubectl describe application proyecto-4 -n argocd
 * MLflow accesible con histórico
 * Grafana mostrando dashboards completos
 * DAG ejecutándose cada 15 minutos
+
+# Link al video de sustentación en Youtube: https://www.youtube.com/watch?v=sA6Kg9LZmzg 
