@@ -233,19 +233,19 @@ kubectl apply -f nombre-del-manifiesto.yaml
 
 # Comandos útiles:
 kubectl get pods -o wide - revisar todos los pods levantados
-kubectl get svc -o wide . revisar todos los servicios levantados
+kubectl get svc -o wide - revisar todos los servicios levantados
 ```
 
 ## Ubicación de cada servicio:
 
-Minio: 10.43.101.165:30901
-MLFlow: 10.43.101.165:30500
-Airflow: 10.43.101.165:30080
-API inferencia: 10.43.101.165:30800/docs
-Gradio: 10.43.101.165:30850
-Prometheus: 10.43.101.201:30910
-Grafana: 10.43.101.201:30300
-ArgoCD: 10.43.101.201:30407
+- Minio: 10.43.101.165:30901
+- MLFlow: 10.43.101.165:30500
+- Airflow: 10.43.101.165:30080
+- API inferencia: 10.43.101.165:30800/docs
+- Gradio: 10.43.101.165:30850
+- Prometheus: 10.43.101.201:30910
+- Grafana: 10.43.101.201:30300
+- ArgoCD: 10.43.101.201:30407
 
 ## ArgoCD 
 
